@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-from .Creature import Creature
+from Creature import Creature
 
 
 class Land(object):
@@ -50,8 +50,8 @@ class Land(object):
     def create_recorder(self, video_path):
         return cv2.VideoWriter(
             filename=video_path,
-            fourcc=cv2.VideoWriter_fourcc(*'MP42'),
-            fps=5.0,
+            fourcc=cv2.VideoWriter_fourcc(*'mp4v'),
+            fps=3.0,
             frameSize=(self._height, self._width),
             isColor=False,
         )

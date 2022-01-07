@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "./make.bat > $null",
+            "command": "make.bat > $null",
             "options": {
                 "cwd": "."
             },

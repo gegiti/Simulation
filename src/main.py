@@ -1,10 +1,10 @@
 import argparse
 
-from .Simulation import Land
+from Simulation import Land
 
 TTL = 30
-WIDTH = 10
-HEIGHT = 10
+WIDTH = 200
+HEIGHT = 200
 CREATURE_PERCENTAGE = 0.2
 
 LEARN_RATE = 0.03
