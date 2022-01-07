@@ -4,7 +4,7 @@
             "name": "Run",
             "type": "python",
             "request": "launch",
-            "module": "src.main"
+            "module": "simulation"
         }
     ]
 }

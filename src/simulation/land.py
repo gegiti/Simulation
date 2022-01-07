@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-from Creature import Creature
+from simulation.creature import Creature
 
 
 class Land(object):
