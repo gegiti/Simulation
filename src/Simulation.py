@@ -41,7 +41,7 @@ class Land(object):
         for index in self.iterate_grid():
             if not self.occupied(index):
                 continue
-            action = self.grid[index].creature.action
+            self.grid[index].creature.take_action()
 
     def run(self):
         while self._time < self._ttl:
