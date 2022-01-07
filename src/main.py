@@ -3,8 +3,8 @@ import argparse
 from .Simulation import Land
 
 TTL = 30
-WIDTH = 200
-LENGTH = 200
+WIDTH = 10
+HEIGHT = 10
 CREATURE_PERCENTAGE = 0.2
 
 LEARN_RATE = 0.03
@@ -14,14 +14,15 @@ NEURONS = 5
 def parse_args():
     parser = argparse.ArgumentParser(description='Evolution Simulation:')
 
-    # program_group = parser.add_argument_group("program")
+    program_group = parser.add_argument_group("program")
+    program_group.add_argument("-v", "--video-path", dest='video_path', default="simulation.mp4")
     # program_group.add_argument("-s", "--save-file-path", type=str, dest='save_path', default=None)
     # program_group.add_argument("-L", "--load-file-path", type=str, dest='load_path', default=None)
     
     simulation_group = parser.add_argument_group("simulation")
     simulation_group.add_argument("-t", "--simulation-time", type=int, dest='ttl', default=TTL)
     simulation_group.add_argument("-w", "--land-width", type=int, dest='land_width', default=WIDTH)
-    simulation_group.add_argument("-l", "--land-length", type=int, dest='land_length', default=LENGTH)
+    simulation_group.add_argument("-l", "--land-height", type=int, dest='land_height', default=HEIGHT)
     simulation_group.add_argument("-p", "--creature-percentage", type=int, dest='creature_percent', default=CREATURE_PERCENTAGE)
     
     creature_group = parser.add_argument_group("creature")
@@ -33,9 +34,9 @@ def parse_args():
 
 
 def create_simulation(args):
-    land_args = args.land_width, args.land_length, args.ttl, args.creature_percent
+    land_args = args.land_width, args.land_height, args.ttl, args.creature_percent
     creature_args = args.neurons, args.learn_rate
-    return Land(land_args, creature_args)
+    return Land(land_args, creature_args, args.video_path)
 
 
 def main():
