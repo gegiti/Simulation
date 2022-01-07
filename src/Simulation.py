@@ -11,22 +11,45 @@ class Land(object):
         self._width, self._length, self._ttl, creature_percent = land_args
         self.creature_args = creature_args        
 
-        self.grid = np.ndarray((self._width, self._length), Creature)
+        self.grid = np.full((self._width, self._length), Cell())
         self.creature_amount = int(self.grid.size * creature_percent)
-        self.init_grid(self.grid, self.creature_amount)
+        self.init_grid()
+
+    def iterate_grid(self):
+        indices = list(np.ndindex(self.grid.shape))
+        np.random.shuffle(indices)
+        for index in indices:
+            yield index
 
     def generate_creature(self):
         return Creature(*self.creature_args)
 
-    def init_grid(self, grid, creature_amount):
-        indices = list(np.ndindex(grid.shape))
-        np.random.shuffle(indices)
-        for index in indices[:creature_amount]:
-            grid[index] = self.generate_creature()
-    
+    def init_grid(self):
+        created = 0
+        for index in self.iterate_grid():
+            if created >= self.creature_amount:
+                break
+            self.grid[index].creature = self.generate_creature()
+            created += 1
+  
+    def occupied(self, index):
+        return self.grid[index].creature
+
     def time_step(self):
         self._time += 1
+        for index in self.iterate_grid():
+            if not self.occupied(index):
+                continue
+            action = self.grid[index].creature.action
 
     def run(self):
         while self._time < self._ttl:
             self.time_step()
+
+
+class Cell(object):
+
+    def __init__(self):
+        self.creature = None
+        self.smell = None
+        self.blocked = False

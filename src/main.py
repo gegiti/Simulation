@@ -2,7 +2,7 @@ import argparse
 
 from .Simulation import Land
 
-TTL = 1000
+TTL = 30
 WIDTH = 200
 LENGTH = 200
 CREATURE_PERCENTAGE = 0.2
