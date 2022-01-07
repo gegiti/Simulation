@@ -2,7 +2,9 @@ from enum import Enum, auto
 
 
 class Creature(object):
-    def __init__(self, neurons, learn_rate):
+    def __init__(self, land, pos, neurons, learn_rate):
+        self.land = land
+        self.pos = pos,
         self.brain = Brain(neurons)
         self.learn_rate = learn_rate
 

@@ -21,15 +21,16 @@ class Land(object):
         for index in indices:
             yield index
 
-    def generate_creature(self):
-        return Creature(*self.creature_args)
+    def generate_creature(self, index):
+        cell = self.grid[index]
+        cell.creature = Creature(self, index, *self.creature_args)
 
     def init_grid(self):
         created = 0
         for index in self.iterate_grid():
             if created >= self.creature_amount:
                 break
-            self.grid[index].creature = self.generate_creature()
+            self.generate_creature(index)
             created += 1
   
     def occupied(self, index):
