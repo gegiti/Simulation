@@ -1,6 +1,8 @@
-bin
-__pycache__
 
 *.py[cod]
 *.egg-info
 *.mp4
+
+bin/
+__pycache__/
+.pytest_cache/
