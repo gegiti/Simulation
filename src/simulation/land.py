@@ -51,7 +51,7 @@ class Land(object):
         return cv2.VideoWriter(
             filename=video_path,
             fourcc=cv2.VideoWriter_fourcc(*'mp4v'),
-            fps=3.0,
+            fps=5.0,
             frameSize=(self._height, self._width),
             isColor=False,
         )
@@ -61,10 +61,8 @@ class Land(object):
 
     def time_step(self, video=False):
         self._time += 1
-        for index in self.iterate_grid():
-            if not self.occupied(index):
-                continue
-            self.grid[index].creature.take_action()
+        for creature in self.creatures:
+            creature.take_action()
         self.recorder.write(self.grid.astype(np.uint8))
         
 
@@ -82,5 +80,11 @@ class Land(object):
         for index in indices:
             yield index
 
-    def occupied(self, index):
-        return self.grid[index].creature
+    def available_cell(self, index):
+        if self.grid[index].blocked:
+            return False
+        if self.grid[index].creature:
+            return False
+        elif not ((0 <= index[0] < self._width) and (0 <= index[1] < self._height)):
+            return False
+        return True

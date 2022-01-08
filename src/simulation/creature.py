@@ -5,12 +5,38 @@ class Creature(object):
 
     class Brain(object):
 
-        def __init__(self, neurons):
+        def __init__(self, creature, neurons):
+            self._creature = creature
             self.graph = self.create_graph(neurons)
+
+        
+        # Initializeation:
 
         @staticmethod
         def create_graph(neurons):
             pass
+
+        
+        # Sensors:
+
+        @property
+        def pos(self):
+            return self._creature.pos
+
+        @property
+        def available_cell(self):
+            return self._creature.land.available_cell
+
+
+        # The brains main method:
+
+        @property
+        def action(self):
+            """Choose what action to execute and return it."""
+            to_index = tuple(Creature.Action.MOVE_EAST.value[i] + self.pos[i] for i in range(len(self.pos)))
+            if self.available_cell(to_index):
+                return Creature.Action.MOVE_EAST
+            return Creature.Action.NOTHING
 
     class Action(Enum):
         NOTHING = auto()
@@ -26,26 +52,17 @@ class Creature(object):
     def __init__(self, land, pos, neurons, learn_rate):
         self.land = land
         self.pos = pos
-        self.brain = Creature.Brain(neurons)
+        self.brain = Creature.Brain(self, neurons)
         self.learn_rate = learn_rate
 
-    @property
-    def action(self):
-        """Choose what action to do and return it."""
-        to_index = tuple(Creature.Action.MOVE_EAST.value[i] + self.pos[i] for i in range(len(self.pos)))
-        if not self.land.occupied(to_index) and ((0 <= to_index[0] < self.land._width) and (0 <= to_index[1] < self.land._height)):
-            return Creature.Action.MOVE_EAST
-        return Creature.Action.NOTHING
-
     def take_action(self):
-        action = self.action
+        action = self.brain.action
         if action.name.startswith("MOVE"):
             to_index = tuple(action.value[i] + self.pos[i] for i in range(len(self.pos)))
             self.move(to_index)
 
     def move(self, to_index):
-        assert not self.land.occupied(to_index), "Tried to move to an occupied cell!"
-        assert (0 <= to_index[0] < self.land._width) and (0 <= to_index[1] < self.land._height), "Tried to move out of the land!"
+        assert self.land.available_cell(to_index), "Tried to move to an unzvailable cell!"
         self.land.grid[to_index].creature = self
         self.land.grid[self.pos].creature = None
         self.pos = to_index
