@@ -15,33 +15,32 @@ from setuptools import setup
 
 def read(*names, **kwargs):
     with io.open(
-        join(dirname(__file__), *names),
-        encoding=kwargs.get('encoding', 'utf8')
+        join(dirname(__file__), *names), encoding=kwargs.get("encoding", "utf8")
     ) as fh:
         return fh.read()
 
 
 setup(
-    name='simulation',
-    version='0.1.0',
-    license='BSD-2-Clause',
-    description='An Evolution Simulatior - Including an agent based simulation and a learning algorithm.',
-    author='Tomer Goren',
-    url='https://https://github.com/gegiti/Simulation',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    name="simulation",
+    version="0.1.0",
+    license="BSD-2-Clause",
+    description="An Evolution Simulatior - Including an agent based simulation and a learning algorithm.",
+    author="Tomer Goren",
+    url="https://https://github.com/gegiti/Simulation",
+    packages=find_packages("src"),
+    package_dir={"": "src"},
+    py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
-    python_requires='>3.9.6',
+    python_requires=">3.9.6",
     install_requires=[
-        'numpy',
-        'opencv-python',
-        'pytest',
+        "numpy",
+        "opencv-python",
+        "pytest",
     ],
     zip_safe=False,
     entry_points={
-        'console_scripts': [
-            'simulation = simulation.__main__:main',
+        "console_scripts": [
+            "simulation = simulation.__main__:main",
         ]
     },
 )
