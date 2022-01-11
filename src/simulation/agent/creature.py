@@ -1,3 +1,5 @@
+import logging
+
 from simulation.agent.brain import Brain
 from simulation.agent.sensors import Sensors
 
@@ -7,9 +9,7 @@ class Creature(object):
     def __init__(self, land, pos, neurons, learn_rate):
         self.land = land
         self.pos = pos
-        sensors = Sensors(self)
-        self.brain = Brain(self, sensors, neurons)
-        self.learn_rate = learn_rate
+        self.brain = Brain(self, Sensors(self), neurons, learn_rate)
 
     def take_action(self):
         action = self.brain.action
@@ -19,6 +19,7 @@ class Creature(object):
 
     def move(self, to_index):
         assert self.land.available_cell(to_index), "Tried to move to an unavailable cell!"
+        logging.debug("Moving from {} to {}".format(self.pos, to_index))
         self.land.grid[to_index].creature = self
         self.land.grid[self.pos].creature = None
         self.pos = to_index

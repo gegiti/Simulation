@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Land(object):
 
     class Cell(object):

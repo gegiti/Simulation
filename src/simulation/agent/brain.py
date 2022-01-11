@@ -3,10 +3,11 @@ from simulation.agent.actions import Action
 
 class Brain(object):
 
-    def __init__(self, creature, sensors, neurons):
+    def __init__(self, creature, sensors, neurons, learn_rate):
         self.creature = creature
         self.sensors = sensors
         self.graph = self.create_graph(neurons)
+        self.learn_rate = learn_rate
 
     # For later use:
     @staticmethod
