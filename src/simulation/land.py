@@ -1,8 +1,4 @@
 import numpy as np
-import cv2
-
-from simulation.creature import Creature
-
 
 class Land(object):
 
@@ -19,60 +15,10 @@ class Land(object):
         def __int__(self):
             return 255 * bool(self)
     
-    def __init__(self, land_args, creature_args, video_path):
-        self._time = 0        
-        self._width, self._height, self._ttl, creature_percent = land_args
-        self._creature_args = creature_args        
-
-        self.creatures = []
-        self.recorder = self.create_recorder(video_path)
-        self.grid = np.array([[Land.Cell() for _ in range(self._height)] for _ in range(self._width)])
-        self.creature_amount = int(self.grid.size * creature_percent)
-        self.init_grid()
-
-
-    # Initialization:
-
-    def generate_creature(self, index):
-        creature = Creature(self, index, *self._creature_args)
-        self.grid[index].creature = creature
-        self.creatures.append(creature)
-        return creature
-
-    def init_grid(self):
-        created = 0
-        for index in self.iterate_grid():
-            if created == self.creature_amount:
-                break
-            self.generate_creature(index)
-            created += 1
-
-    def create_recorder(self, video_path):
-        return cv2.VideoWriter(
-            filename=video_path,
-            fourcc=cv2.VideoWriter_fourcc(*'mp4v'),
-            fps=5.0,
-            frameSize=(self._height, self._width),
-            isColor=False,
-        )
-
-
-    # Run simulation:
-
-    def time_step(self, video=False):
-        self._time += 1
-        for creature in self.creatures:
-            creature.take_action()
-        self.recorder.write(self.grid.astype(np.uint8))
-        
-
-    def run(self):
-        while self._time < self._ttl:
-            self.time_step()
-        self.recorder.release()
-
-
-    # Utils:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.grid = np.array([[Land.Cell() for _ in range(self.width)] for _ in range(self.height)])
 
     def iterate_grid(self):
         indices = list(np.ndindex(self.grid.shape))
@@ -81,10 +27,10 @@ class Land(object):
             yield index
 
     def available_cell(self, index):
-        if self.grid[index].blocked:
+        if not ((0 <= index[0] < self.height) and (0 <= index[1] < self.width)):
             return False
-        if self.grid[index].creature:
+        elif self.grid[index].blocked:
             return False
-        elif not ((0 <= index[0] < self._width) and (0 <= index[1] < self._height)):
+        elif self.grid[index].creature:
             return False
         return True
