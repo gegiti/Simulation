@@ -1,9 +1,12 @@
-import cv2
-import numpy as np
+import inspect
 import logging
 import time
 
+import cv2
+import numpy as np
+
 from simulation.agent.creature import Creature
+from simulation.configuration import configure_land, score
 from simulation.land import Land
 from simulation.logging import setup_logging
 
@@ -13,7 +16,7 @@ class Simulation(object):
         self.ttl, creature_percent, land_width, land_height, video_path, log_path = simulation_args
         self.time = 1
         self.creatures = []
-        self.land = Land(*land_args)
+        self.land = configure_land(Land(*land_args))
         creature_amount = int(land_width * land_height * creature_percent)
         self.create_creatures(self.land, creature_args, creature_amount)
         self.recorder = self.create_recorder(video_path, land_width, land_height)
@@ -22,6 +25,8 @@ class Simulation(object):
         logging.info("Simulation arguments: {}".format(simulation_args))
         logging.info("Land arguments: {}".format(land_args))
         logging.info("Creature arguments: {}".format(creature_args))
+        logging.info("Land configuration:\n{}".format(inspect.getsource(configure_land)))
+        logging.info("Score configuration:\n{}".format(inspect.getsource(score)))
 
     @staticmethod
     def generate_creature(land, index, creature_args):
@@ -43,7 +48,7 @@ class Simulation(object):
         return cv2.VideoWriter(
             filename=video_path,
             fourcc=cv2.VideoWriter_fourcc(*'mp4v'),
-            fps=5.0,
+            fps=25.0,
             frameSize=(width, height),
             isColor=False,
         )
@@ -63,4 +68,4 @@ class Simulation(object):
             self.time_step()
         self.recorder.release()
         end_time = time.time()
-        logging.info("The simulation took {} seconds".format(int(end_time - start_time)))
+        logging.info("Simulation ended - took {} seconds".format(int(end_time - start_time)))
