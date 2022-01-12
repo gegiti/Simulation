@@ -10,3 +10,7 @@ def test_defult_run(fix):
 
 def test_isort(fix):
     os.system("python -m isort .")
+
+
+def test_balck(fix):
+    os.system("python -m black . --line-length 120")

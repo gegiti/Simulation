@@ -1,24 +1,33 @@
-from simulation.agent.actions import Action
+import numpy as np
+import random
+
+from simulation.agent.actions import Actions, calculate_move_index
 
 
 class Brain(object):
-
-    def __init__(self, creature, sensors, neurons, learn_rate):
+    def __init__(self, creature, sensors, layers, learn_rate):
         self.creature = creature
         self.sensors = sensors
-        self.graph = self.create_graph(neurons)
+        self.net = self.create_net(sensors, layers, len(Actions))
         self.learn_rate = learn_rate
 
     # For later use:
     @staticmethod
-    def create_graph(neurons):
+    def create_net(inputs, layers, outputs):
         pass
+
+    def is_action_possible(self, action):
+        if action is Actions.NOTHING:
+            return True
+        if action.name.startswith("MOVE"):
+            return self.sensors.available_cell(calculate_move_index(self.sensors.pos, action))
 
     # The brains main method:
     @property
     def action(self):
         """Choose what action to execute and return it."""
-        to_index = tuple(Action.MOVE_EAST.value[i] + self.sensors.pos[i] for i in range(len(self.sensors.pos)))
-        if self.sensors.available_cell(to_index):
-            return Action.MOVE_EAST
-        return Action.NOTHING
+        # action = random.choice(list(Actions))
+        action = Actions.MOVE_NORTH_EAST
+        if self.is_action_possible(action):
+            return action
+        return Actions.NOTHING

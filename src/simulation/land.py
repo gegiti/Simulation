@@ -2,20 +2,19 @@ import numpy as np
 
 
 class Land(object):
-
     class Cell(object):
-
         def __init__(self):
             self.creature = None
             self.smell = None
             self.blocked = False
 
-        def __bool__(self):
-            return bool(self.creature)
-
         def __int__(self):
-            return 255 * bool(self)
-    
+            if self.blocked:
+                return 128
+            if self.creature:
+                return 255
+            return 0
+
     def __init__(self, width, height):
         self.width = width
         self.height = height

@@ -2,7 +2,7 @@ import logging
 from enum import Enum, auto
 
 
-class Action(Enum):
+class Actions(Enum):
 
     NOTHING = auto()
 
@@ -18,9 +18,18 @@ class Action(Enum):
     MOVE_NORTH_WEST = (-1, -1)
 
 
-def move(creature, to_index):
+def move(creature, action):
+    _move(creature, calculate_move_index(creature.pos, action))
+
+
+def calculate_move_index(position, action):
+    assert action.name.startswith("MOVE"), "This is not a MOVE action"
+    return tuple(action.value[i] + position[i] for i in range(len(position)))
+
+
+def _move(creature, to_index):
     assert creature.land.available_cell(to_index), "Tried to move to an unavailable cell!"
-    logging.debug("Moving from {} to {}".format(creature.pos, to_index))
+    logging.action(creature, "Moving from {} to {}".format(creature.pos, to_index))
     creature.land.grid[to_index].creature = creature
     creature.land.grid[creature.pos].creature = None
     creature.pos = to_index

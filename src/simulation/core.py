@@ -13,14 +13,14 @@ from simulation.logging import setup_logging
 
 class Simulation(object):
     def __init__(self, simulation_args, land_args, creature_args):
-        self.ttl, creature_percent, land_width, land_height, video_path, log_path = simulation_args
+        self.ttl, creature_percent, land_width, land_height, video_path, log_path, log_actions = simulation_args
         self.time = 1
         self.creatures = []
         self.land = configure_land(Land(*land_args))
         creature_amount = int(land_width * land_height * creature_percent)
         self.create_creatures(self.land, creature_args, creature_amount)
         self.recorder = self.create_recorder(video_path, land_width, land_height)
-        setup_logging(log_path)
+        setup_logging(log_path, log_actions)
         logging.info("Simulation Initialized")
         logging.info("Simulation arguments: {}".format(simulation_args))
         logging.info("Land arguments: {}".format(land_args))
@@ -47,7 +47,7 @@ class Simulation(object):
     def create_recorder(video_path, width, height):
         return cv2.VideoWriter(
             filename=video_path,
-            fourcc=cv2.VideoWriter_fourcc(*'mp4v'),
+            fourcc=cv2.VideoWriter_fourcc(*"mp4v"),
             fps=25.0,
             frameSize=(width, height),
             isColor=False,
