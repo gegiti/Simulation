@@ -15,7 +15,7 @@ def parse_args(args=None):
     simulation_group.add_argument("-t", "--simulation-time", type=int, dest="ttl", default=1000)
     simulation_group.add_argument("--land-width", type=int, dest="land_width", default=50)
     simulation_group.add_argument("--land-height", type=int, dest="land_height", default=50)
-    simulation_group.add_argument("-p", "--creature-percentage", type=float, dest="creature_percent", default=1/2500)
+    simulation_group.add_argument("-p", "--creature-percentage", type=float, dest="creature_percent", default=1 / 2500)
 
     creature_group = parser.add_argument_group("creature")
     creature_group.add_argument("-r", "--learning-rate", type=float, dest="learn_rate", default=0.03)

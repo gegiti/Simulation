@@ -1,4 +1,5 @@
 import numpy as np
+
 from simulation.configuration import score
 
 
